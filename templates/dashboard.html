@@ -457,4 +457,55 @@ document.addEventListener(
 
 </script>
 
+
+
+<script>
+
+/* AUTO DATE TIME FILL */
+
+document.addEventListener(
+'DOMContentLoaded',
+() => {
+
+    const dateField =
+        document.querySelector(
+            'input[name="date"]'
+        );
+
+    const timeField =
+        document.querySelector(
+            'input[name="time"]'
+        );
+
+    const now = new Date();
+
+    if(dateField && !dateField.value){
+
+        dateField.value =
+            now.toISOString()
+                .split('T')[0];
+    }
+
+    if(timeField && !timeField.value){
+
+        const hh =
+            String(
+                now.getHours()
+            ).padStart(2,'0');
+
+        const mm =
+            String(
+                now.getMinutes()
+            ).padStart(2,'0');
+
+        timeField.value =
+            `${hh}:${mm}`;
+    }
+
+});
+
+</script>
+
+
+
 {% endblock %}

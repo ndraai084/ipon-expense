@@ -1447,3 +1447,53 @@ table {
     }
 
 }
+
+
+/* =====================================
+   MOBILE TYPOGRAPHY
+   ===================================== */
+
+@media (max-width:768px){
+
+    body{
+        font-size:16px;
+    }
+
+    h1{
+        font-size:1.75rem !important;
+    }
+
+    h2{
+        font-size:1.35rem !important;
+    }
+
+    h3{
+        font-size:1.15rem !important;
+    }
+
+    .card-title{
+        font-size:1rem !important;
+    }
+
+    .card-value{
+        font-size:1.5rem !important;
+    }
+
+    table{
+        font-size:.95rem;
+    }
+
+    button{
+        font-size:1rem;
+    }
+
+    input,
+    select{
+        font-size:16px !important;
+    }
+
+    .topbar-title{
+        font-size:1.3rem !important;
+    }
+}
+
