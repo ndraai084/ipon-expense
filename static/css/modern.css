@@ -881,7 +881,6 @@ MODERN AUTH
 .auth-wrapper{
 
     width:100%;
-    max-width: 80%;
     max-width:460px;
     overflow:hidden;
 
@@ -1425,6 +1424,10 @@ table {
     .chart-card canvas{
 
         max-width:100% !important;
+    }
+
+    .auth-wrapper{
+        max-width:80% !important;
     }
 }
 
