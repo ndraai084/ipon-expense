@@ -1,0 +1,460 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 style="font-size:2rem;margin-bottom:20px;">
+Dashboard
+</h1>
+
+<div class="summary-grid">
+
+    <div class="card stat-card">
+        <div class="card-title">
+            Total Balance
+        </div>
+        <div class="card-value">
+            ₱{{ balance|currency }}
+        </div>
+    </div>
+
+    <div class="card stat-card">
+        <div class="card-title">
+            Income
+        </div>
+        <div class="card-value income">
+            ₱{{ total_income|currency }}
+        </div>
+    </div>
+
+    <div class="card stat-card">
+        <div class="card-title">
+            Expense
+        </div>
+        <div class="card-value expense">
+            ₱{{ total_expense|currency }}
+        </div>
+    </div>
+
+    <div class="card stat-card">
+        <div class="card-title">
+            Savings
+        </div>
+        <div class="card-value savings">
+            ₱{{ balance|currency }}
+        </div>
+    </div>
+
+</div>
+
+<div class="chart-grid">
+
+    <div class="chart-card">
+        <h3>Income vs Expense</h3>
+        <canvas id="incomeExpenseChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+        <h3>Monthly Trends</h3>
+        <canvas id="monthlyChart"></canvas>
+    </div>
+
+</div>
+
+<div class="card" style="margin-top:20px;">
+
+    <h2 style="margin-bottom:15px;">
+        Quick Add Transaction
+    </h2>
+
+    <form
+        action="/transactions/add"
+        method="POST"
+        class="quick-form">
+
+        <input
+            type="number"
+            step="0.01"
+            name="amount"
+            placeholder="Amount"
+            required>
+
+        <select id="transactionType" name="type">
+
+            <option value="income">
+                Income
+            </option>
+
+            <option value="expense">
+                Expense
+            </option>
+
+        </select>
+
+        <div id="categoryContainer">
+
+            <select
+                id="categoryField"
+                name="category">
+
+                <option value="">
+                    Select Category
+                </option>
+
+                {% for category in DEFAULT_CATEGORIES %}
+                <option value="{{ category }}">
+                    {{ category }}
+                </option>
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+<input
+    type="date"
+    name="date">
+
+<input
+    type="time"
+    name="time">
+
+<input
+    type="text"
+    name="note"
+    placeholder="Note">
+
+
+        <button type="submit">
+            Add Transaction
+        </button>
+
+    </form>
+
+</div>
+
+<div class="card" style="margin-top:20px;">
+
+    <h2 style="margin-bottom:15px;">
+        Recent Transactions
+    </h2>
+
+    <table>
+
+        <thead>
+
+        <tr>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Type</th>
+            <th>Amount</th>
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% if transactions %}
+
+            {% for t in transactions[:5] %}
+
+            <tr>
+
+                <td>{{ t.date.strftime('%b %d, %Y • %I:%M %p') if t.date else 'No Date' }}</td>
+
+                <td>{{ t.category }}</td>
+
+                <td>{{ t.type }}</td>
+
+                <td>₱{{ t.amount|currency }}</td>
+
+            </tr>
+
+            {% endfor %}
+
+        {% else %}
+
+            <tr>
+                <td colspan="4" style="text-align:center;padding:20px;">
+                    No transactions found.
+                </td>
+            </tr>
+
+        {% endif %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<script>
+
+document.addEventListener(
+"DOMContentLoaded",
+() => {
+
+    gsap.from(
+        ".stat-card",
+        {
+            opacity:0,
+            y:30,
+            stagger:.1,
+            duration:.6
+        }
+    );
+
+    const incomeExpenseCtx =
+        document.getElementById(
+            "incomeExpenseChart"
+        );
+
+    if(incomeExpenseCtx){
+
+        new Chart(
+            incomeExpenseCtx,
+            {
+                type:"bar",
+
+                data:{
+                    labels:
+                        {{ income_expense_chart_data.labels|tojson }},
+
+                    datasets:[
+                        {
+                            label:"Amount",
+
+                            data:
+                                {{ income_expense_chart_data.data|tojson }},
+
+                            backgroundColor:[
+                                '#00C26F',
+                                '#EF4444'
+                            ]
+                        }
+                    ]
+                },
+
+                options:{
+
+                    plugins:{
+                        legend:{
+                            labels:{
+                                color:'#6B7280',
+                                font:{
+                                    family:"'Elms Sans', sans-serif",
+                                    size:12
+                                }
+                            }
+                        }
+                    },
+
+                    scales:{
+                        x:{
+                            ticks:{
+                                color:'#6B7280',
+                                font:{
+                                    family:"'Elms Sans', sans-serif",
+                                    size:12
+                                }
+                            },
+                            grid:{
+                                color:'#E5E7EB'
+                            }
+                        },
+
+                        y:{
+                            ticks:{
+                                color:'#6B7280',
+                                font:{
+                                    family:"'Elms Sans', sans-serif",
+                                    size:12
+                                }
+                            },
+                            grid:{
+                                color:'#E5E7EB'
+                            }
+                        }
+                    }
+
+                }
+            }
+        );
+
+    }
+
+    const monthlyCtx =
+        document.getElementById(
+            "monthlyChart"
+        );
+
+    if(monthlyCtx){
+
+        new Chart(
+            monthlyCtx,
+            {
+                type:"line",
+
+                data:{
+                    labels:
+                        {{ monthly_chart_data.labels|tojson }},
+
+                    datasets:[
+                        {
+                            label:"Income",
+
+                            data:
+                                {{ monthly_chart_data.income|tojson }},
+
+                            borderColor:'#00C26F',
+
+                            backgroundColor:
+                                'rgba(0,194,111,.15)',
+
+                            fill:true,
+
+                            tension:.35
+                        },
+
+                        {
+                            label:"Expense",
+
+                            data:
+                                {{ monthly_chart_data.expense|tojson }},
+
+                            borderColor:'#EF4444',
+
+                            backgroundColor:
+                                'rgba(239,68,68,.15)',
+
+                            fill:true,
+
+                            tension:.35
+                        }
+                    ]
+                },
+
+                options:{
+
+                    plugins:{
+                        legend:{
+                            labels:{
+                                color:'#6B7280',
+                                font:{
+                                    family:"'Elms Sans', sans-serif",
+                                    size:12
+                                }
+                            }
+                        }
+                    },
+
+                    scales:{
+                        x:{
+                            ticks:{
+                                color:'#6B7280',
+                                font:{
+                                    family:"'Elms Sans', sans-serif",
+                                    size:12
+                                }
+                            },
+                            grid:{
+                                color:'#E5E7EB'
+                            }
+                        },
+
+                        y:{
+                            ticks:{
+                                color:'#6B7280',
+                                font:{
+                                    family:"'Elms Sans', sans-serif",
+                                    size:12
+                                }
+                            },
+                            grid:{
+                                color:'#E5E7EB'
+                            }
+                        }
+                    }
+
+                }
+            }
+        );
+
+    }
+
+});
+
+</script>
+
+
+<script>
+
+document.addEventListener(
+'DOMContentLoaded',
+() => {
+
+    const typeSelect =
+        document.getElementById(
+            'transactionType'
+        );
+
+    const categoryContainer =
+        document.getElementById(
+            'categoryContainer'
+        );
+
+    const categoryField =
+        document.getElementById(
+            'categoryField'
+        );
+
+    if(
+        !typeSelect ||
+        !categoryContainer ||
+        !categoryField
+    ){
+        return;
+    }
+
+    function updateCategory(){
+
+        if(
+            typeSelect.value ===
+            'income'
+        ){
+
+            categoryContainer.style.display =
+                'none';
+
+            categoryField.value = '';
+
+            categoryField.required =
+                false;
+
+        }
+
+        else{
+
+            categoryContainer.style.display =
+                'block';
+
+            categoryField.required =
+                true;
+
+        }
+
+    }
+
+    typeSelect.addEventListener(
+        'change',
+        updateCategory
+    );
+
+    updateCategory();
+
+});
+
+</script>
+
+{% endblock %}

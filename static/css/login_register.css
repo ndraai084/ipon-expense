@@ -1,0 +1,394 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Elms+Sans:wght@300;400;500;600;700&display=swap');
+
+.auth-container { width:300px; margin:3rem auto; padding:2rem; border:1px solid #ccc; border-radius:10px; }
+.auth-container input, .auth-container button, .auth-container select { width:100%; margin:0.5rem 0; padding:0.5rem; border-radius:5px; }
+
+/* ===== iPon Typography ===== */
+
+/* Body */
+body,
+input,
+select,
+button,
+textarea,
+p,
+span,
+small,
+label,
+a,
+li,
+td,
+th {
+    font-family: 'Elms Sans', sans-serif !important;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.hero-title,
+.page-title,
+.auth-title,
+.card-title {
+    font-family: 'Bungee', cursive !important;
+}
+
+/* Subtitles */
+.subtitle,
+.auth-subtitle,
+.section-subtitle,
+.card-subtitle,
+.muted-label,
+.section-label {
+    font-family: 'Bungee', cursive !important;
+    letter-spacing: 1px;
+}
+
+
+/* ==========================================
+   DESKTOP MAX-WIDTH POLISH
+   ========================================== */
+
+.main-content,
+.dashboard-container,
+.analytics-container,
+.transactions-container,
+.settings-container,
+.page-container {
+
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+    box-sizing: border-box;
+}
+
+/* Responsive cards */
+
+.summary-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(250px, 1fr)
+        );
+
+    gap: 20px;
+}
+
+/* Responsive charts */
+
+.chart-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(500px, 1fr)
+        );
+
+    gap: 24px;
+}
+
+/* Prevent gigantic tables */
+
+table {
+    width: 100%;
+}
+
+/* Ultrawide monitor protection */
+
+@media (min-width: 1800px) {
+
+    .main-content,
+    .dashboard-container,
+    .analytics-container,
+    .transactions-container,
+    .settings-container,
+    .page-container {
+
+        max-width: 1500px;
+    }
+}
+
+
+/* =====================================
+   iPon Header & Sidebar Refresh
+   ===================================== */
+
+.navbar,
+.topbar,
+.header {
+
+    background: #FFFFFF !important;
+    border-bottom: 1px solid #E5E7EB;
+    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+}
+
+/* App Logo */
+
+.logo,
+.brand,
+.navbar-brand {
+
+    font-family: 'Bungee', cursive !important;
+    color: #111827 !important;
+    font-size: 1.25rem;
+    letter-spacing: .5px;
+}
+
+/* Menu Text */
+
+.sidebar,
+.sidebar a,
+.side-menu,
+.side-menu a,
+.nav-link {
+
+    font-family: 'Elms Sans', sans-serif !important;
+    color: #374151 !important;
+    font-weight: 500;
+}
+
+/* Hover */
+
+.sidebar a:hover,
+.side-menu a:hover,
+.nav-link:hover {
+
+    color: #00C26F !important;
+}
+
+/* Hamburger */
+
+.menu-toggle,
+.hamburger,
+.sidebar-toggle {
+
+    background: #00C26F !important;
+    border-radius: 12px;
+    color: white !important;
+}
+
+/* Active Item */
+
+.sidebar .active,
+.side-menu .active {
+
+    background: rgba(0,194,111,.12);
+    color: #00C26F !important;
+    border-radius: 12px;
+}
+
+
+/* ==========================================
+   iPon Green Sidebar Theme
+   ========================================== */
+
+.sidebar,
+.side-menu,
+.sidebar-menu {
+
+    background: #00C26F !important;
+}
+
+/* Menu Text */
+
+.sidebar a,
+.side-menu a,
+.sidebar-menu a,
+.nav-link,
+.menu-item {
+
+    color: white !important;
+    font-family: 'Elms Sans', sans-serif !important;
+    font-weight: 500;
+    transition: all .25s ease;
+}
+
+/* Font Awesome Icons */
+
+.sidebar i,
+.side-menu i,
+.sidebar-menu i {
+
+    color: white !important;
+    transition: all .25s ease;
+}
+
+/* SVG Icons */
+
+.sidebar svg,
+.side-menu svg,
+.sidebar-menu svg {
+
+    fill: white !important;
+    transition: all .25s ease;
+}
+
+/* Hover */
+
+.sidebar a:hover,
+.side-menu a:hover,
+.sidebar-menu a:hover,
+.nav-link:hover,
+.menu-item:hover {
+
+    background: white !important;
+    color: #00C26F !important;
+    border-radius: 12px;
+}
+
+/* Hover Icons */
+
+.sidebar a:hover i,
+.side-menu a:hover i,
+.sidebar-menu a:hover i,
+.nav-link:hover i {
+
+    color: #00C26F !important;
+}
+
+.sidebar a:hover svg,
+.side-menu a:hover svg,
+.sidebar-menu a:hover svg {
+
+    fill: #00C26F !important;
+}
+
+/* Active */
+
+.sidebar .active,
+.side-menu .active,
+.sidebar-menu .active,
+.nav-link.active {
+
+    background: white !important;
+    color: #00C26F !important;
+    border-radius: 12px;
+}
+
+.sidebar .active i,
+.side-menu .active i,
+.sidebar-menu .active i {
+
+    color: #00C26F !important;
+}
+
+.sidebar .active svg,
+.side-menu .active svg,
+.sidebar-menu .active svg {
+
+    fill: #00C26F !important;
+}
+
+
+/* ==========================================
+   FINAL HEADER POLISH
+   ========================================== */
+
+/* Header Container */
+
+.header,
+.navbar,
+.topbar {
+
+    width: 100%;
+}
+
+/* Center Header Contents */
+
+.header-inner,
+.navbar-inner,
+.topbar-inner {
+
+    max-width: 1440px;
+    margin: 0 auto;
+
+    padding-left: 24px;
+    padding-right: 24px;
+
+    display: flex;
+    align-items: center;
+}
+
+/* iPon Logo */
+
+.logo,
+.brand,
+.navbar-brand {
+
+    font-family: 'Bungee', cursive !important;
+
+    font-size: 1.6rem;
+    font-weight: normal;
+
+    color: #FFFFFF !important;
+
+    letter-spacing: 1px;
+
+    text-transform: none;
+}
+
+/* Mobile */
+
+@media (max-width:768px){
+
+    .logo,
+    .brand,
+    .navbar-brand{
+
+        font-size:1.3rem;
+    }
+
+}
+
+
+.topbar {
+    width: 100%;
+    position: relative;
+}
+
+.topbar-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 24px;
+
+    height: 64px;
+
+    position: relative;
+}
+
+.burger {
+    position: absolute;
+    left: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.topbar-title {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    font-family: 'Bungee', cursive !important;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+
+    color: white;
+}
+
+.sidebar-header h2 {
+    font-family: 'Bungee', cursive !important;
+    letter-spacing: 1px;
+}
+
+

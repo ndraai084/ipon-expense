@@ -1,0 +1,28 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Firebase Secrets
+firebase-key.json
+firebase_config.json
+serviceAccountKey.json
+firebase-adminsdk*.json
+
+# Environment Variables
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+firebase_config.py
+__pycache__/
+*.pyc
+
+firebase-key.json
+firebase_config.py

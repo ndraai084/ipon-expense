@@ -1,0 +1,79 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 style="font-size:2rem;margin-bottom:20px;">
+Settings
+</h1>
+
+<div class="settings-grid">
+
+    <div class="card">
+
+        <h2>
+            Account Information
+        </h2>
+
+        <p>
+            <strong>Username:</strong>
+            {{ user.username }}
+        </p>
+
+        <p>
+            <strong>Email:</strong>
+            {{ user.email }}
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h2>
+            Account Statistics
+        </h2>
+
+        <p>
+            Transactions:
+            {{ transaction_count }}
+        </p>
+
+        <p>
+            Income Records:
+            {{ income_count }}
+        </p>
+
+        <p>
+            Expense Records:
+            {{ expense_count }}
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h2>
+            About iPon
+        </h2>
+
+        <p>
+            Version 1.0
+        </p>
+
+        <p>
+            Flask + Firebase Firestore
+        </p>
+
+        <p>
+            Chart.js + GSAP
+        </p>
+
+        <p>
+            Personal Finance Tracker
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

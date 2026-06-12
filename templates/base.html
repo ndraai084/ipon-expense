@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>iPon</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static',
+          filename='css/modern.css') }}">
+
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    {% if session.get('user') %}
+
+    <div class="sidebar" id="sidebar">
+
+        <div class="sidebar-header">
+            <h2>iPon</h2>
+        </div>
+
+        <div class="sidebar-links">
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/analytics">
+                Analytics
+            </a>
+
+            <a href="/transactions">
+                Transactions
+            </a>
+
+            <a href="/settings">
+                Settings
+            </a>
+
+        </div>
+
+        <div class="sidebar-footer">
+
+            <a href="/logout">
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+    <div id="overlay"></div>
+
+    {% endif %}
+
+    {% if session.get('user') %}
+
+    <div class="topbar">
+
+        <div class="topbar-inner">
+
+            <button
+                class="burger"
+                id="burger-btn">
+
+                ☰
+
+            </button>
+
+            <span class="topbar-title">
+
+                iPon
+
+            </span>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+    <div class="main-content">
+
+        {% block content %}
+        {% endblock %}
+
+    </div>
+
+</div>
+
+<script src="{{ url_for(
+'static',
+filename='js/sidebar.js') }}"></script>
+
+</body>
+
+</html>

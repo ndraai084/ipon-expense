@@ -1,0 +1,123 @@
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+{% if balance == 0 and total_income == 0 and total_expense == 0 %}
+
+<div class="empty-state">
+
+    <h2>
+        No analytics available yet
+    </h2>
+
+    <p>
+        Add transactions to generate
+        insights and charts.
+    </p>
+
+</div>
+
+{% else %}
+
+
+<h1 style="font-size:2rem;margin-bottom:20px;">
+Analytics
+</h1>
+
+<div class="summary-grid">
+
+    <div class="card">
+        <div class="card-title">
+            Balance
+        </div>
+
+        <div class="card-value">
+            ₱{{ balance|currency }}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            Income
+        </div>
+
+        <div class="card-value income">
+            ₱{{ total_income|currency }}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            Expense
+        </div>
+
+        <div class="card-value expense">
+            ₱{{ total_expense|currency }}
+        </div>
+    </div>
+
+</div>
+
+<div class="chart-grid">
+
+    <div class="chart-card">
+
+        <h3>
+            Spending by Category
+        </h3>
+
+        <canvas id="categoryChart"></canvas>
+
+    </div>
+
+    <div class="chart-card">
+
+        <h3>
+            Income vs Expense
+        </h3>
+
+        <canvas id="incomeExpenseChart"></canvas>
+
+    </div>
+
+</div>
+
+<div class="chart-card"
+     style="margin-top:20px;">
+
+    <h3>
+        Monthly Trends
+    </h3>
+
+    <canvas id="monthlyChart"></canvas>
+
+</div>
+
+<script src="{{ url_for(
+'static',
+filename='js/analytics.js'
+) }}"></script>
+
+<script>
+
+window.analyticsData = {
+
+    category:
+        {{ category_chart_data|tojson }},
+
+    incomeExpense:
+        {{ income_expense_chart_data|tojson }},
+
+    monthly:
+        {{ monthly_chart_data|tojson }}
+
+};
+
+</script>
+
+
+{% endif %}
+
+{% endblock %}

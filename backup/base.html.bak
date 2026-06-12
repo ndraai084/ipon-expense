@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>iPon</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login_register.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Firebase SDK -->
+<script type="module">
+  // Import only what you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBk-X57P0UXh2GzU_wNkUWK_vmTfxOZi20",
+    authDomain: "ipon-expensetracker.firebaseapp.com",
+    projectId: "ipon-expensetracker",
+    storageBucket: "ipon-expensetracker.appspot.com",
+    messagingSenderId: "464932863138",
+    appId: "1:464932863138:web:07c356776ee28b3c6e2bfb",
+    measurementId: "G-SHHMRETCBB"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+</script>
+</head>
+<body>
+<header>
+<h1>iPon</h1>
+</header>
+<main>
+{% block content %}{% endblock %}
+</main>
+</body>
+</html>
