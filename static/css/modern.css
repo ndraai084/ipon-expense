@@ -1612,3 +1612,6 @@ select{
     background-repeat:no-repeat;
 }
 
+.sidebar{
+    height:100vh !important;
+}
