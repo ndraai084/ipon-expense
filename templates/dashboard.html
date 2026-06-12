@@ -13,7 +13,8 @@ Dashboard
         <div class="card-title">
             Total Balance
         </div>
-        <div class="card-value">
+        <div class="card-value"
+             style="color:{% if balance < 0 %}#ef4444{% else %}#22c55e{% endif %};">
             ₱{{ balance|currency }}
         </div>
     </div>
@@ -46,6 +47,28 @@ Dashboard
     </div>
 
 </div>
+
+{% if budget and budget > 0 %}
+{% set pct = month_expense / budget * 100 %}
+<div class="card" style="margin-top:20px;">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <strong>Monthly Budget</strong>
+        <span>₱{{ month_expense|currency }} / ₱{{ budget|currency }}</span>
+    </div>
+
+    <div style="background:#e5e7eb;border-radius:999px;height:14px;overflow:hidden;">
+        <div style="height:100%;border-radius:999px;width:{{ 100 if pct > 100 else pct }}%;background:{% if month_expense > budget %}#ef4444{% else %}#22c55e{% endif %};"></div>
+    </div>
+
+    {% if month_expense > budget %}
+    <p style="color:#ef4444;margin-top:10px;">
+        ⚠ You're over budget by ₱{{ (month_expense - budget)|currency }} this month.
+    </p>
+    {% endif %}
+
+</div>
+{% endif %}
 
 <div class="chart-grid">
 
@@ -101,7 +124,7 @@ Dashboard
                     Select Category
                 </option>
 
-                {% for category in DEFAULT_CATEGORIES %}
+                {% for category in categories %}
                 <option value="{{ category }}">
                     {{ category }}
                 </option>

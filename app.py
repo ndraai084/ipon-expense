@@ -5,7 +5,8 @@ from services.services import (
     calculate_balance, calculate_total_income, calculate_total_expense,
     compute_spending_by_category,
     get_category_chart_data, get_income_expense_chart_data, get_monthly_chart_data,
-    DEFAULT_CATEGORIES
+    get_categories, add_category, delete_category,
+    get_budget, set_budget, calculate_current_month_expense
 )
 import pandas as pd  # sir paul library ng python
 
@@ -98,6 +99,8 @@ def dashboard():
     recent_transactions = transactions[:10]
     balance = total_income = total_expense = 0
     category_totals = {}
+    month_expense = 0
+    budget = get_budget(user['uid'])
 
     category_chart = {
         "labels": [],
@@ -124,6 +127,7 @@ def dashboard():
         category_chart = get_category_chart_data(df)
         income_expense_chart = get_income_expense_chart_data(df)
         monthly_chart = get_monthly_chart_data(df)
+        month_expense = calculate_current_month_expense(df)
 
     return render_template('dashboard.html',
         user=user,
@@ -135,7 +139,9 @@ def dashboard():
         category_chart_data=category_chart,
         income_expense_chart_data=income_expense_chart,
         monthly_chart_data=monthly_chart,
-        DEFAULT_CATEGORIES=DEFAULT_CATEGORIES
+        categories=get_categories(user['uid']),
+        budget=budget,
+        month_expense=month_expense
     )
 
 @app.route('/logout')
@@ -206,8 +212,56 @@ def settings():
             income_count,
 
         expense_count=
-            expense_count
+            expense_count,
+
+        categories=
+            get_categories(user['uid']),
+
+        budget=
+            get_budget(user['uid'])
     )
+
+@app.route('/budget', methods=['POST'])
+def update_budget():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    user = session['user']
+
+    set_budget(
+        user['uid'],
+        request.form.get('budget', 0)
+    )
+
+    return redirect(url_for('settings'))
+
+@app.route('/categories/add', methods=['POST'])
+def add_cat():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    user = session['user']
+
+    add_category(
+        user['uid'],
+        request.form.get('category_name', '')
+    )
+
+    return redirect(url_for('settings'))
+
+@app.route('/categories/delete', methods=['POST'])
+def delete_cat():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    user = session['user']
+
+    delete_category(
+        user['uid'],
+        request.form.get('category_name', '')
+    )
+
+    return redirect(url_for('settings'))
 
 @app.route('/transactions/add', methods=['POST'])
 def add_trans():
@@ -418,7 +472,8 @@ def transactions():
 
     return render_template(
         'transactions.html',
-        transactions=transactions
+        transactions=transactions,
+        categories=get_categories(user['uid'])
     )
 
 if __name__=="__main__":

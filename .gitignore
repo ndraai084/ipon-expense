@@ -8,6 +8,7 @@ firebase-key.json
 firebase_config.json
 serviceAccountKey.json
 firebase-adminsdk*.json
+ipon-firebase.json
 
 # Environment Variables
 .env

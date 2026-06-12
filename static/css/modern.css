@@ -822,6 +822,44 @@ SETTINGS V2
 
 
 /* ==========================
+TRANSACTION FILTERS
+========================== */
+
+.filter-bar{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+    margin-bottom:20px;
+}
+
+.filter-bar input,
+.filter-bar select,
+.filter-bar button{
+
+    padding:10px 12px;
+
+    border:1px solid #d1d5db;
+
+    border-radius:12px;
+}
+
+.filter-bar button{
+
+    background:#00c26f;
+
+    color:white;
+
+    border:none;
+
+    cursor:pointer;
+}
+
+
+/* ==========================
 EMPTY STATES
 ========================== */
 
