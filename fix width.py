@@ -1,35 +1,28 @@
 from pathlib import Path
 
-file = Path("static/css/modern.css")
+file = Path("templates/base.html")
 
 text = file.read_text(encoding="utf-8")
 
-patch = """
-
-/* =====================================
-   MOBILE TABLE FIX
-   ===================================== */
-
-@media (max-width:768px){
-
-    .card table{
-        display:table !important;
-        width:100%;
-        min-width:600px;
-    }
-
-    .card{
-        overflow-x:auto;
-    }
-
-}
+viewport_tag = """
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 """
 
-if "MOBILE TABLE FIX" not in text:
-    text += patch
-    file.write_text(text, encoding="utf-8")
-    print("Added mobile table fix.")
-else:
-    print("Fix already exists.")
+if "name=\"viewport\"" not in text:
 
-print("Done.")
+    text = text.replace(
+        "<head>",
+        f"<head>\n\n    {viewport_tag}"
+    )
+
+    file.write_text(
+        text,
+        encoding="utf-8"
+    )
+
+    print("Viewport meta tag added.")
+
+else:
+
+    print("Viewport tag already exists.")
