@@ -4,72 +4,72 @@ file = Path("static/css/modern.css")
 
 text = file.read_text(encoding="utf-8")
 
-if "MOBILE SIDEBAR COMPACT" not in text:
+if "EDIT MODAL WHITE THEME" not in text:
 
     text += """
 
 /* =====================================
-   MOBILE SIDEBAR COMPACT
+   EDIT MODAL WHITE THEME
    ===================================== */
 
-@media (max-width:768px){
+.modal,
+.edit-modal,
+.modal-content{
 
-    .sidebar{
-
-        height:100vh !important;
-
-        display:flex !important;
-        flex-direction:column;
-
-        overflow:hidden;
-    }
-
-    .sidebar-header{
-
-        padding:16px 20px !important;
-    }
-
-    .sidebar-header h2{
-
-        font-size:1.5rem !important;
-        margin:0 !important;
-    }
-
-    .sidebar-links{
-
-        flex:1;
-
-        overflow-y:auto;
-
-        padding:8px 0;
-    }
-
-    .sidebar-links a{
-
-        padding:12px 20px !important;
-        font-size:1rem !important;
-    }
-
-    .sidebar-footer{
-
-        flex-shrink:0;
-
-        border-top:1px solid rgba(255,255,255,.15);
-
-        padding:12px 20px !important;
-    }
-
-    .sidebar-footer a{
-
-        font-size:1rem !important;
-    }
-
+    background:#FFFFFF !important;
+    color:#111827 !important;
 }
+
+.modal h2,
+.modal h3,
+.modal label,
+.modal p,
+.edit-modal h2,
+.edit-modal h3,
+.edit-modal label,
+.edit-modal p{
+
+    color:#111827 !important;
+}
+
+.modal input,
+.modal select,
+.modal textarea,
+.edit-modal input,
+.edit-modal select,
+.edit-modal textarea{
+
+    background:#FFFFFF !important;
+    color:#111827 !important;
+    border:1px solid #D1D5DB;
+}
+
+/* =====================================
+   DROPDOWN PADDING FIX
+   ===================================== */
+
+select{
+
+    padding-right:2.75rem !important;
+
+    appearance:none;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+
+    background-position:
+        right 14px center !important;
+
+    background-repeat:no-repeat;
+}
+
 """
 
-    file.write_text(text, encoding="utf-8")
+    file.write_text(
+        text,
+        encoding="utf-8"
+    )
 
-    print("Mobile sidebar compact mode added.")
+    print("Modal and dropdown patch added.")
 
 else:
 
