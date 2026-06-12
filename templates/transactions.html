@@ -6,13 +6,44 @@
 Transactions
 </h1>
 
+<div class="filter-bar">
+
+    <input
+        type="text"
+        id="filterSearch"
+        placeholder="Search note...">
+
+    <select id="filterType">
+        <option value="">All Types</option>
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+    </select>
+
+    <select id="filterCategory">
+        <option value="">All Categories</option>
+        {% for category in categories %}
+        <option value="{{ category }}">{{ category }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="date" id="filterFrom" title="From date">
+    <input type="date" id="filterTo" title="To date">
+
+    <button type="button" id="clearFilters">Clear</button>
+
+</div>
+
 <div class="transactions-grid">
 
 {% if transactions %}
 
 {% for t in transactions %}
 
-<div class="transaction-card">
+<div class="transaction-card"
+     data-type="{{ t.type }}"
+     data-category="{{ t.category }}"
+     data-date="{{ t.date.strftime('%Y-%m-%d') if t.date else '' }}"
+     data-note="{{ t.note|lower }}">
 
     <div class="transaction-header">
 
@@ -174,9 +205,11 @@ Transactions
                         Select Category
                     </option>
 
-                    <option value="Food">Food</option>
-                    <option value="Transportation">Transportation</option>
-                    <option value="Utilities">Utilities</option>
+                    {% for category in categories %}
+                    <option value="{{ category }}">
+                        {{ category }}
+                    </option>
+                    {% endfor %}
 
                 </select>
 
@@ -441,6 +474,69 @@ document.addEventListener(
 
         }
     );
+
+
+    // ---- Filters ----
+    const cards =
+        document.querySelectorAll(
+            '.transaction-card'
+        );
+
+    const fSearch =
+        document.getElementById('filterSearch');
+    const fType =
+        document.getElementById('filterType');
+    const fCategory =
+        document.getElementById('filterCategory');
+    const fFrom =
+        document.getElementById('filterFrom');
+    const fTo =
+        document.getElementById('filterTo');
+    const clearFilters =
+        document.getElementById('clearFilters');
+
+    function applyFilters(){
+
+        const search = fSearch.value.toLowerCase();
+        const type = fType.value;
+        const category = fCategory.value;
+        const from = fFrom.value;
+        const to = fTo.value;
+
+        cards.forEach(card => {
+
+            const cType = card.dataset.type || '';
+            const cCat = card.dataset.category || '';
+            const cDate = card.dataset.date || '';
+            const cNote = card.dataset.note || '';
+
+            let show = true;
+
+            if(type && cType !== type) show = false;
+            if(category && cCat !== category) show = false;
+            if(search && !cNote.includes(search)) show = false;
+            if(from && cDate && cDate < from) show = false;
+            if(to && cDate && cDate > to) show = false;
+
+            card.style.display = show ? '' : 'none';
+
+        });
+
+    }
+
+    [fSearch, fType, fCategory, fFrom, fTo]
+    .forEach(el => {
+        el.addEventListener('input', applyFilters);
+    });
+
+    clearFilters.addEventListener('click', () => {
+        fSearch.value = '';
+        fType.value = '';
+        fCategory.value = '';
+        fFrom.value = '';
+        fTo.value = '';
+        applyFilters();
+    });
 
 
 });

@@ -156,3 +156,74 @@ def get_monthly_chart_data(df):
 
 # Default categories
 DEFAULT_CATEGORIES = ["Food","Transportation","Utilities"]
+
+
+# Per-user categories
+def get_categories(user_id):
+    user_ref = db.collection("users").document(user_id)
+    snapshot = user_ref.get()
+    data = snapshot.to_dict() if snapshot.exists else {}
+    categories = data.get("categories")
+
+    # Seed existing/old accounts with the defaults on first read
+    if not categories:
+        categories = list(DEFAULT_CATEGORIES)
+        user_ref.set({"categories": categories}, merge=True)
+
+    return categories
+
+def add_category(user_id, name):
+    name = (name or "").strip()
+    if not name:
+        return
+
+    categories = get_categories(user_id)
+
+    # Case-insensitive dedupe so "Food" and "food" don't both appear
+    if name.lower() in [c.lower() for c in categories]:
+        return
+
+    categories.append(name)
+    db.collection("users").document(user_id).update({"categories": categories})
+
+def delete_category(user_id, name):
+    categories = get_categories(user_id)
+    categories = [c for c in categories if c != name]
+    db.collection("users").document(user_id).update({"categories": categories})
+
+
+# Monthly budget
+def get_budget(user_id):
+    user_ref = db.collection("users").document(user_id)
+    snapshot = user_ref.get()
+    data = snapshot.to_dict() if snapshot.exists else {}
+    try:
+        return float(data.get("budget", 0) or 0)
+    except (TypeError, ValueError):
+        return 0.0
+
+def set_budget(user_id, amount):
+    try:
+        amount = float(amount)
+    except (TypeError, ValueError):
+        amount = 0.0
+    if amount < 0:
+        amount = 0.0
+    db.collection("users").document(user_id).set({"budget": amount}, merge=True)
+
+def calculate_current_month_expense(df):
+    if df.empty or "type" not in df.columns or "date" not in df.columns:
+        return 0.0
+
+    df = df.copy()
+    df["date"] = pd.to_datetime(df["date"], errors="coerce")
+    df = df.dropna(subset=["date"])
+
+    now = datetime.now()
+    mask = (
+        (df["type"] == "expense")
+        & (df["date"].dt.year == now.year)
+        & (df["date"].dt.month == now.month)
+    )
+
+    return float(df[mask]["amount"].sum())
