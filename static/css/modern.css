@@ -881,9 +881,8 @@ MODERN AUTH
 .auth-wrapper{
 
     width:100%;
-
+    max-width: 80%;
     max-width:460px;
-
     overflow:hidden;
 
     border-radius:28px;
