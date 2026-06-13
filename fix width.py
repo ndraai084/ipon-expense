@@ -1,76 +1,42 @@
-from pathlib import Path
-
-file = Path("static/css/modern.css")
-
-text = file.read_text(encoding="utf-8")
-
-if "EDIT MODAL WHITE THEME" not in text:
-
-    text += """
-
-/* =====================================
-   EDIT MODAL WHITE THEME
-   ===================================== */
-
-.modal,
-.edit-modal,
-.modal-content{
-
-    background:#FFFFFF !important;
-    color:#111827 !important;
-}
-
-.modal h2,
-.modal h3,
-.modal label,
-.modal p,
-.edit-modal h2,
-.edit-modal h3,
-.edit-modal label,
-.edit-modal p{
-
-    color:#111827 !important;
-}
-
-.modal input,
-.modal select,
-.modal textarea,
-.edit-modal input,
-.edit-modal select,
-.edit-modal textarea{
-
-    background:#FFFFFF !important;
-    color:#111827 !important;
-    border:1px solid #D1D5DB;
-}
-
-/* =====================================
-   DROPDOWN PADDING FIX
-   ===================================== */
-
-select{
-
-    padding-right:2.75rem !important;
-
-    appearance:none;
-    -webkit-appearance:none;
-    -moz-appearance:none;
-
-    background-position:
-        right 14px center !important;
-
-    background-repeat:no-repeat;
-}
 
 """
+patch_finance_tracker.py
 
-    file.write_text(
-        text,
-        encoding="utf-8"
-    )
+Usage:
+    python patch_finance_tracker.py path/to/your_file.py
+"""
 
-    print("Modal and dropdown patch added.")
+import sys
+from pathlib import Path
 
-else:
+if len(sys.argv) < 2:
+    print("Usage: python patch_finance_tracker.py path/to/your_file.py")
+    sys.exit(1)
 
-    print("Patch already exists.")
+target = Path(sys.argv[1])
+
+if not target.exists():
+    print(f"File not found: {target}")
+    sys.exit(1)
+
+text = target.read_text(encoding="utf-8")
+
+backup = target.with_suffix(target.suffix + ".bak")
+backup.write_text(text, encoding="utf-8")
+
+text = text.replace(
+    "return income - expense",
+    "return float(np.subtract(income, expense))",
+    1
+)
+
+text = text.replace(
+    'income = df[df["type"]=="income"]["amount"].sum()\n    expense = df[df["type"]=="expense"]["amount"].sum()',
+    'income = np.sum(df[df["type"]=="income"]["amount"])\n    expense = np.sum(df[df["type"]=="expense"]["amount"])',
+    1
+)
+
+target.write_text(text, encoding="utf-8")
+
+print("Patch applied successfully.")
+print(f"Backup created: {backup}")

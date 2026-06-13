@@ -53,7 +53,13 @@ def delete_transaction(user_id, trans_id):
 def calculate_balance(df):
     income = df[df["type"]=="income"]["amount"].sum()
     expense = df[df["type"]=="expense"]["amount"].sum()
-    return income - expense
+
+    return float(
+        np.subtract(
+            income,
+            expense
+        )
+    )
 
 def calculate_total_income(df):
     return df[df["type"]=="income"]["amount"].sum()
@@ -76,8 +82,13 @@ def get_category_chart_data(df):
 def get_income_expense_chart_data(df):
     if df.empty or "type" not in df.columns:
         return {"labels": ["Income","Expense"], "data":[0,0]}
-    income = df[df["type"]=="income"]["amount"].sum()
-    expense = df[df["type"]=="expense"]["amount"].sum()
+    income = np.sum(
+        df[df["type"] == "income"]["amount"]
+    )
+
+    expense = np.sum(
+        df[df["type"] == "expense"]["amount"]
+    )
     return {"labels":["Income","Expense"], "data":[float(income),float(expense)]}
 
 
@@ -154,6 +165,73 @@ def get_monthly_chart_data(df):
 
     }
 
+def generate_monthly_trend_chart(df):
+
+    if df.empty:
+        return None
+
+    data = get_monthly_chart_data(df)
+
+    if not data["labels"]:
+        return None
+
+    os.makedirs(
+        "static/charts",
+        exist_ok=True
+    )
+
+    x = np.arange(
+        len(data["labels"])
+    )
+
+    plt.figure(
+        figsize=(8, 4)
+    )
+
+    plt.plot(
+        x,
+        data["income"],
+        marker="o",
+        label="Income"
+    )
+
+    plt.plot(
+        x,
+        data["expense"],
+        marker="o",
+        label="Expense"
+    )
+
+    plt.xticks(
+        x,
+        data["labels"],
+        rotation=45
+    )
+
+    plt.title(
+        "Monthly Income vs Expense"
+    )
+
+    plt.ylabel(
+        "Amount"
+    )
+
+    plt.legend()
+
+    plt.tight_layout()
+
+    chart_path = (
+        "static/charts/monthly_trend.png"
+    )
+
+    plt.savefig(
+        chart_path
+    )
+
+    plt.close()
+
+    return chart_path
+
 # Default categories
 DEFAULT_CATEGORIES = ["Food","Transportation","Utilities"]
 
@@ -226,4 +304,8 @@ def calculate_current_month_expense(df):
         & (df["date"].dt.month == now.month)
     )
 
-    return float(df[mask]["amount"].sum())
+    return float(
+        np.sum(
+            df[mask]["amount"]
+        )
+    )
