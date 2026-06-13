@@ -254,6 +254,45 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
+<script>
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const installBtn = document.getElementById('pwa-install-btn');
+    const fallback   = document.getElementById('pwa-install-fallback');
+
+    if (installBtn) {
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log('Install prompt outcome:', outcome);
+                deferredPrompt = null;
+                if (outcome === 'accepted') {
+                    const card = document.getElementById('pwa-install-card');
+                    if (card) card.style.display = 'none';
+                }
+            } else {
+                // Browser doesn't support beforeinstallprompt (e.g. Safari)
+                if (fallback) fallback.style.display = 'block';
+            }
+        });
+    }
+});
+
+window.addEventListener('appinstalled', () => {
+    const card = document.getElementById('pwa-install-card');
+    if (card) card.style.display = 'none';
+    deferredPrompt = null;
+    console.log('PWA was installed');
+});
+</script>
+
 </body>
 
 </html>
