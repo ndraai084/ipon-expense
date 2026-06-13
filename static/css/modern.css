@@ -1978,4 +1978,16 @@ earlier max-width/centering polish. Mobile (<=768px) is untouched.
     .settings-grid{
         grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
     }
+
+    /* Hide PWA install card on desktop */
+    .pwa-mobile-only{
+        display:none !important;
+    }
+}
+
+/* Hide PWA install card when already running as installed app */
+@media (display-mode: standalone){
+    .pwa-mobile-only{
+        display:none !important;
+    }
 }
