@@ -1,4 +1,26 @@
 
+<style>
+/* Force settings cards to stack */
+.settings-grid{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:20px !important;
+}
+
+/* Hide mobile-only items on desktop */
+.pwa-mobile-only{
+    display:none;
+}
+
+/* Show on mobile */
+@media (max-width:768px){
+    .pwa-mobile-only{
+        display:block;
+    }
+}
+</style>
+
+
 {% extends 'base.html' %}
 
 {% block content %}

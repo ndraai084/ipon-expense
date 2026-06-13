@@ -1,42 +1,49 @@
-
-"""
-patch_finance_tracker.py
-
-Usage:
-    python patch_finance_tracker.py path/to/your_file.py
-"""
-
-import sys
 from pathlib import Path
+import re
 
-if len(sys.argv) < 2:
-    print("Usage: python patch_finance_tracker.py path/to/your_file.py")
-    sys.exit(1)
+HTML_FILE = "templates/settings.html"  # change if needed
 
-target = Path(sys.argv[1])
+html_path = Path(HTML_FILE)
 
-if not target.exists():
-    print(f"File not found: {target}")
-    sys.exit(1)
+if not html_path.exists():
+    print(f"File not found: {HTML_FILE}")
+    exit()
 
-text = target.read_text(encoding="utf-8")
+content = html_path.read_text(encoding="utf-8")
 
-backup = target.with_suffix(target.suffix + ".bak")
-backup.write_text(text, encoding="utf-8")
-
-text = text.replace(
-    "return income - expense",
-    "return float(np.subtract(income, expense))",
-    1
+# Ensure Session card is mobile-only
+content = content.replace(
+    '<div class="card">\n\n        <h2>\n            Session',
+    '<div class="card pwa-mobile-only">\n\n        <h2>\n            Session'
 )
 
-text = text.replace(
-    'income = df[df["type"]=="income"]["amount"].sum()\n    expense = df[df["type"]=="expense"]["amount"].sum()',
-    'income = np.sum(df[df["type"]=="income"]["amount"])\n    expense = np.sum(df[df["type"]=="expense"]["amount"])',
-    1
-)
+# Inject CSS block if not already present
+css_block = """
+<style>
+/* Force settings cards to stack */
+.settings-grid{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:20px !important;
+}
 
-target.write_text(text, encoding="utf-8")
+/* Hide mobile-only items on desktop */
+.pwa-mobile-only{
+    display:none;
+}
 
-print("Patch applied successfully.")
-print(f"Backup created: {backup}")
+/* Show on mobile */
+@media (max-width:768px){
+    .pwa-mobile-only{
+        display:block;
+    }
+}
+</style>
+"""
+
+if ".pwa-mobile-only" not in content:
+    content = css_block + "\n" + content
+
+html_path.write_text(content, encoding="utf-8")
+
+print("✓ settings.html updated successfully")
