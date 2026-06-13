@@ -626,7 +626,7 @@ PACKAGE 4B MODALS
 
 .modal-card{
 
-    background:#1f5c45;
+    background:white;
 
     padding:24px;
 
@@ -1955,8 +1955,7 @@ select{
     height:100% !important;
 }
 
-#editModal .modal-card,
-#deleteModal .modal-card{
+.modal-card {
     background:#ffffff !important;
     color:#111827;
 }
