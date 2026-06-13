@@ -52,7 +52,7 @@ Dashboard
 {% set pct = month_expense / budget * 100 %}
 <div class="card" style="margin-top:20px;">
 
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+    <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:space-between;align-items:center;margin-bottom:10px;">
         <strong>Monthly Budget</strong>
         <span>₱{{ month_expense|currency }} / ₱{{ budget|currency }}</span>
     </div>
@@ -84,7 +84,7 @@ Dashboard
 
 </div>
 
-<div class="card" style="margin-top:20px;">
+<div class="card desktop-quick-add" style="margin-top:20px;">
 
     <h2 style="margin-bottom:15px;">
         Quick Add Transaction
@@ -163,6 +163,8 @@ Dashboard
         Recent Transactions
     </h2>
 
+    <div class="desktop-only">
+
     <table>
 
         <thead>
@@ -209,6 +211,24 @@ Dashboard
         </tbody>
 
     </table>
+
+    </div>
+
+    <div class="recent-list">
+        {% if transactions %}
+            {% for t in transactions[:5] %}
+            <div class="recent-item">
+                <div class="recent-main">
+                    <span class="recent-cat">{{ t.category if t.category else 'Income' }}</span>
+                    <span class="recent-amount {{ 'income' if t.type == 'income' else 'expense' }}">₱{{ t.amount|currency }}</span>
+                </div>
+                <div class="recent-date">{{ t.date.strftime('%b %d, %Y • %I:%M %p') if t.date else 'No Date' }}</div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="text-align:center;padding:10px;">No transactions found.</p>
+        {% endif %}
+    </div>
 
 </div>
 

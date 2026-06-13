@@ -3,7 +3,8 @@
 
 <head>
 
-    
+    <meta charset="utf-8">
+
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
@@ -19,6 +20,17 @@
     <link rel="stylesheet"
           href="{{ url_for('static',
           filename='css/modern.css') }}">
+
+    <!-- PWA (Android) -->
+    <link rel="manifest"
+          href="{{ url_for('static', filename='manifest.json') }}">
+    <meta name="theme-color" content="#00c26f">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="iPon">
+    <link rel="icon" type="image/png" sizes="192x192"
+          href="{{ url_for('static', filename='icons/icon-192.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32"
+          href="{{ url_for('static', filename='icons/favicon-32.png') }}">
 
 </head>
 
@@ -36,19 +48,23 @@
 
         <div class="sidebar-links">
 
-            <a href="/dashboard">
+            <a href="/dashboard"
+               class="{% if request.path == '/dashboard' %}active{% endif %}">
                 Dashboard
             </a>
 
-            <a href="/analytics">
+            <a href="/analytics"
+               class="{% if request.path == '/analytics' %}active{% endif %}">
                 Analytics
             </a>
 
-            <a href="/transactions">
+            <a href="/transactions"
+               class="{% if request.path == '/transactions' %}active{% endif %}">
                 Transactions
             </a>
 
-            <a href="/settings">
+            <a href="/settings"
+               class="{% if request.path == '/settings' %}active{% endif %}">
                 Settings
             </a>
 
@@ -94,6 +110,96 @@
 
     {% endif %}
 
+    {% if session.get('user') %}
+    <!-- Mobile bottom navigation -->
+    <nav class="bottom-nav">
+
+        <a href="/dashboard"
+           class="bn-item {% if request.path == '/dashboard' %}active{% endif %}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/>
+            </svg>
+            <span>Home</span>
+        </a>
+
+        <a href="/analytics"
+           class="bn-item {% if request.path == '/analytics' %}active{% endif %}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <line x1="6" y1="20" x2="6" y2="12"/><line x1="12" y1="20" x2="12" y2="5"/>
+                <line x1="18" y1="20" x2="18" y2="14"/>
+            </svg>
+            <span>Stats</span>
+        </a>
+
+        <button type="button" class="bn-fab" id="openAddSheet" aria-label="Add transaction">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+        </button>
+
+        <a href="/transactions"
+           class="bn-item {% if request.path == '/transactions' %}active{% endif %}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+                <line x1="8" y1="18" x2="21" y2="18"/><circle cx="3.5" cy="6" r="1"/>
+                <circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/>
+            </svg>
+            <span>History</span>
+        </a>
+
+        <a href="/settings"
+           class="bn-item {% if request.path == '/settings' %}active{% endif %}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/>
+                <line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/>
+                <line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/>
+                <line x1="17" y1="16" x2="23" y2="16"/>
+            </svg>
+            <span>Settings</span>
+        </a>
+
+    </nav>
+
+    <!-- Add-transaction bottom sheet (mobile) -->
+    <div class="sheet-overlay" id="addSheetOverlay"></div>
+    <div class="bottom-sheet" id="addSheet">
+        <div class="sheet-handle"></div>
+        <h2>Add Transaction</h2>
+        <form action="/transactions/add" method="POST" class="sheet-form">
+
+            <input type="number" step="0.01" name="amount"
+                   placeholder="Amount" required>
+
+            <select id="sheetType" name="type">
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+            </select>
+
+            <div id="sheetCategoryContainer">
+                <select id="sheetCategory" name="category">
+                    <option value="">Select Category</option>
+                    {% for category in nav_categories %}
+                    <option value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <input type="date" name="date">
+            <input type="time" name="time">
+            <input type="text" name="note" placeholder="Note">
+
+            <button type="submit" class="save-btn">Add Transaction</button>
+
+        </form>
+    </div>
+    {% endif %}
+
     <div class="main-content">
 
         {% block content %}
@@ -106,6 +212,47 @@
 <script src="{{ url_for(
 'static',
 filename='js/sidebar.js') }}"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const sheet   = document.getElementById('addSheet');
+    const overlay = document.getElementById('addSheetOverlay');
+    const openBtn = document.getElementById('openAddSheet');
+    const type    = document.getElementById('sheetType');
+    const catBox  = document.getElementById('sheetCategoryContainer');
+
+    if (openBtn && sheet && overlay) {
+        openBtn.addEventListener('click', () => {
+            sheet.classList.add('active');
+            overlay.classList.add('active');
+        });
+        overlay.addEventListener('click', () => {
+            sheet.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+    }
+
+    function syncCategory() {
+        if (!type || !catBox) return;
+        catBox.style.display = type.value === 'income' ? 'none' : 'block';
+    }
+    if (type) {
+        type.addEventListener('change', syncCategory);
+        syncCategory();
+    }
+});
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker
+            .register('/sw.js')
+            .catch((err) => console.log('SW registration failed:', err));
+    });
+}
+</script>
 
 </body>
 

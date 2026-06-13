@@ -858,6 +858,281 @@ TRANSACTION FILTERS
     cursor:pointer;
 }
 
+/* search grows to fill the row on desktop */
+#filterSearch{
+    flex:1 1 180px;
+}
+
+/* stack filters full-width on phones so they stay tappable */
+@media (max-width:768px){
+
+    .filter-bar{
+        flex-direction:column;
+    }
+
+    .filter-bar input,
+    .filter-bar select,
+    .filter-bar button{
+        width:100%;
+    }
+
+    /* reset the desktop grow so the search box doesn't balloon vertically
+       once the bar becomes a column */
+    #filterSearch{
+        flex:0 0 auto;
+    }
+}
+
+
+/* ==========================
+RECENT TRANSACTIONS (mobile list)
+========================== */
+
+/* hidden on desktop; the table is shown instead */
+.recent-list{
+    display:none;
+}
+
+.recent-item{
+    border:1px solid rgba(0,0,0,.08);
+    border-radius:14px;
+    padding:12px 14px;
+}
+
+.recent-main{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.recent-cat{
+    font-weight:600;
+}
+
+.recent-amount{
+    font-weight:700;
+    white-space:nowrap;
+}
+
+.recent-date{
+    color:#64748b;
+    font-size:.85rem;
+    margin-top:4px;
+}
+
+/* on phones the table is display:none, so show the card list */
+@media (max-width:768px){
+
+    .recent-list{
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+    }
+}
+
+
+/* ==========================
+BOTTOM NAV + FAB (mobile)
+========================== */
+
+/* hidden on desktop; the hamburger drawer is used there */
+.bottom-nav{
+    display:none;
+}
+
+@media (max-width:768px){
+
+    .bottom-nav{
+        display:flex;
+        position:fixed;
+        bottom:0;
+        left:0;
+        right:0;
+        height:64px;
+        align-items:center;
+        justify-content:space-around;
+        background:#0f3d2e;
+        border-top:1px solid rgba(255,255,255,.06);
+        padding-bottom:env(safe-area-inset-bottom);
+        z-index:900;
+    }
+
+    .bn-item{
+        flex:1;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        gap:3px;
+        text-decoration:none;
+        color:rgba(255,255,255,.55);
+        font-size:.66rem;
+    }
+
+    .bn-item svg{
+        width:22px;
+        height:22px;
+    }
+
+    .bn-item.active{
+        color:#fff;
+    }
+
+    .bn-item.active svg{
+        color:#22c55e;
+    }
+
+    .bn-fab{
+        flex:0 0 auto;
+        width:58px;
+        height:58px;
+        margin-top:-26px;
+        border-radius:50%;
+        border:4px solid var(--bg);
+        background:var(--accent);
+        color:#fff;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        cursor:pointer;
+        box-shadow:0 8px 18px rgba(0,194,111,.45);
+    }
+
+    .bn-fab svg{
+        width:26px;
+        height:26px;
+    }
+
+    /* keep page content clear of the fixed bottom bar */
+    .main-content{
+        padding-bottom:88px !important;
+    }
+
+    /* bottom nav replaces the hamburger on phones */
+    body.logged-in .burger{
+        display:none !important;
+    }
+
+    /* the FAB replaces the inline quick-add form on phones */
+    .desktop-quick-add{
+        display:none;
+    }
+}
+
+
+/* ==========================
+ADD-TRANSACTION BOTTOM SHEET
+========================== */
+
+.sheet-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.5);
+    opacity:0;
+    visibility:hidden;
+    transition:.2s ease;
+    z-index:1100;
+}
+
+.sheet-overlay.active{
+    opacity:1;
+    visibility:visible;
+}
+
+.bottom-sheet{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    background:var(--card);
+    color:var(--text);
+    border-radius:22px 22px 0 0;
+    padding:14px 18px calc(22px + env(safe-area-inset-bottom));
+    transform:translateY(110%);
+    transition:transform .25s ease;
+    z-index:1101;
+    max-height:88vh;
+    overflow-y:auto;
+}
+
+.bottom-sheet.active{
+    transform:translateY(0);
+}
+
+.sheet-handle{
+    width:42px;
+    height:4px;
+    border-radius:999px;
+    background:#cbd5e1;
+    margin:0 auto 14px;
+}
+
+.bottom-sheet h2{
+    margin-bottom:14px;
+    font-size:1.2rem;
+}
+
+.sheet-form{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.sheet-form input,
+.sheet-form select{
+    padding:14px;
+    border:1px solid #d1d5db;
+    border-radius:12px;
+    font-size:1rem;
+    background:#fff;
+    color:var(--text);
+}
+
+.sheet-form .save-btn{
+    padding:14px;
+    font-size:1rem;
+    border-radius:12px;
+}
+
+
+/* ==========================
+LOGOUT BUTTON (settings)
+========================== */
+
+.logout-btn{
+    display:inline-block;
+    margin-top:8px;
+    padding:12px 18px;
+    background:#ef4444;
+    color:#fff;
+    text-decoration:none;
+    border-radius:12px;
+    font-weight:600;
+}
+
+
+/* ==========================
+MOBILE CLEANUP (all pages)
+========================== */
+
+/* desktop-only blocks (e.g. the dashboard data table) give way to
+   the mobile card list so content isn't duplicated on phones */
+@media (max-width:768px){
+    .desktop-only{
+        display:none !important;
+    }
+}
+
+/* keep edit/delete modals inside the viewport on small screens */
+.modal-card{
+    max-height:90vh;
+    overflow-y:auto;
+}
+
+
+/* (desktop layout rules live at the end of the file so they win the cascade) */
+
 
 /* ==========================
 EMPTY STATES
@@ -1654,4 +1929,53 @@ select{
 
 .sidebar{
     height:100% !important;
+}
+
+
+/* ==========================
+DESKTOP LAYOUT (>=769px) — LAST in the file so it wins over the
+earlier max-width/centering polish. Mobile (<=768px) is untouched.
+========================== */
+
+@media (min-width:769px){
+
+    /* persistent, always-visible left rail (overrides the off-canvas drawer) */
+    .sidebar{
+        transform:none !important;
+        width:240px !important;
+        height:100vh !important;
+    }
+
+    /* content fills the space beside the rail; override the earlier
+       `.main-content{margin:0 auto; max-width:1440px}` polish so it doesn't
+       slide under the fixed sidebar */
+    .main-content{
+        flex:1 1 auto !important;
+        width:auto !important;
+        max-width:none !important;
+        margin:0 0 0 240px !important;
+        padding:32px 40px !important;
+    }
+
+    /* topbar, burger, and drawer overlay are mobile-only affordances */
+    .topbar{
+        display:none !important;
+    }
+
+    body.logged-in .burger{
+        display:none !important;
+    }
+
+    #overlay{
+        display:none !important;
+    }
+
+    /* use the horizontal space: multi-column card grids on desktop */
+    .transactions-grid{
+        grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+    }
+
+    .settings-grid{
+        grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+    }
 }
