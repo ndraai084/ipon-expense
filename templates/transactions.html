@@ -26,8 +26,14 @@ Transactions
         {% endfor %}
     </select>
 
-    <input type="date" id="filterFrom" title="From date">
-    <input type="date" id="filterTo" title="To date">
+    <div class="date-input-wrapper">
+        <label for="filterFrom" class="date-label">Start Date</label>
+        <input type="date" id="filterFrom" title="From date" max="">
+    </div>
+    <div class="date-input-wrapper">
+        <label for="filterTo" class="date-label">End Date</label>
+        <input type="date" id="filterTo" title="To date" max="">
+    </div>
 
     <button type="button" id="clearFilters">Clear</button>
 
@@ -492,6 +498,12 @@ document.addEventListener(
         document.getElementById('filterFrom');
     const fTo =
         document.getElementById('filterTo');
+
+    // Prevent selecting future dates
+    const today = new Date().toISOString().split('T')[0];
+    fFrom.setAttribute('max', today);
+    fTo.setAttribute('max', today);
+
     const clearFilters =
         document.getElementById('clearFilters');
 
