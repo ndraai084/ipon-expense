@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#00c26f">
+    <title>Offline — iPon</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            padding: 24px;
+        }
+        .offline-wrap {
+            text-align: center;
+            max-width: 360px;
+        }
+        .logo {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #00c26f;
+            margin-bottom: 8px;
+        }
+        h2 {
+            font-size: 1.25rem;
+            margin: 0 0 8px;
+        }
+        p {
+            color: #64748b;
+            margin: 0 0 24px;
+            line-height: 1.5;
+        }
+        button {
+            background: #00c26f;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-wrap">
+        <div class="logo">iPon</div>
+        <h2>You're offline</h2>
+        <p>We couldn't reach the server. Check your internet connection and try again.</p>
+        <button onclick="location.reload()">Retry</button>
+    </div>
+</body>
+</html>

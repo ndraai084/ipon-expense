@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory, make_response
 from services.auth_service import register_user, login_user
 from services.services import (
     get_transactions, add_transaction, edit_transaction, delete_transaction,
@@ -26,9 +26,35 @@ def currency(value):
 
         return "0.00"
 
+@app.context_processor
+def inject_nav_categories():
+    # Categories for the global mobile "add transaction" bottom sheet,
+    # which appears on every page (not just the ones that pass categories).
+    if 'user' in session:
+        try:
+            return {'nav_categories': get_categories(session['user']['uid'])}
+        except Exception:
+            return {'nav_categories': []}
+    return {'nav_categories': []}
+
 @app.route('/')
 def home():
     return redirect(url_for('login'))
+
+@app.route('/sw.js')
+def service_worker():
+    # Served from the root so the worker's scope covers the whole site
+    # (a worker under /static/ could only control /static/*).
+    response = make_response(
+        send_from_directory('static', 'sw.js')
+    )
+    response.headers['Content-Type'] = 'application/javascript'
+    response.headers['Service-Worker-Allowed'] = '/'
+    return response
+
+@app.route('/offline')
+def offline():
+    return render_template('offline.html')
 
 @app.route('/login', methods=['GET','POST'])
 def login():
