@@ -626,7 +626,7 @@ PACKAGE 4B MODALS
 
 .modal-card{
 
-    background:white;
+    background-color:white;
 
     padding:24px;
 
@@ -736,6 +736,9 @@ PACKAGE 6 LIGHT THEME
             0,
             .06
         );
+}
+.modal-card{
+    background-color:white;
 }
 
 .transaction-card:hover{
@@ -1152,6 +1155,7 @@ MOBILE CLEANUP (all pages)
 .modal-card{
     max-height:90vh;
     overflow-y:auto;
+    background-color: white;
 }
 
 
@@ -1956,7 +1960,7 @@ select{
 }
 
 .modal-card {
-    background:#ffffff !important;
+    background-color:white !important;
     color:#111827;
 }
 
