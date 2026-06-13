@@ -1955,6 +1955,12 @@ select{
     height:100% !important;
 }
 
+#editModal .modal-card,
+#deleteModal .modal-card{
+    background:#ffffff !important;
+    color:#111827;
+}
+
 
 /* ==========================
 DESKTOP LAYOUT (>=769px) — LAST in the file so it wins over the
